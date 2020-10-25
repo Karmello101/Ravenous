@@ -4,7 +4,7 @@ import Yelp from '../src/util/Yelp'
 import SearchBar from './components/SearchBar/SearchBar';
 import BusinessList from './components/BusinessList/BusinessList';
 
-const business = {
+/* const business = {
   imageSrc: 'https://content.codecademy.com/programs/react/ravenous/pizza.jpg',
   name: 'MarginOtto Pizzeria',
   address: '1010 Paddington Way',
@@ -24,18 +24,32 @@ const businesses = [
   business,
   business
 ];
+*/ 
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      businesses: []
+    };
+
+    this.searchYelp = this.searchYelp.bind(this); 
+  }
+
   searchYelp(term,location,sortBy) {
-    console.log(`You are searching for ${term}, ${location}, and ${sortBy}`)
+    Yelp.search(term, location , sortBy).then((businesses) => {
+      this.setState({businesses: businesses})
+    
+    });
   }
   
  render() {
   return (
      <div className="App">
       <h1>ravenous</h1>
-      <SearchBar key={this.searchYelp.id} searchYelp={this.searchYelp} />
-      <BusinessList key={businesses.id} businesses={businesses} />
+      <SearchBar searchYelp={this.searchYelp} />
+      <BusinessList businesses={this.state.businesses} />
   </div>
   );
  }
